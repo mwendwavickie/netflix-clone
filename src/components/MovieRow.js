@@ -1,7 +1,8 @@
 import React from 'react';
-import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
+import MovieCard from './MovieCard';
 
-const MovieRow = ({title, movies}) => {
+const MovieRow = ({title, movies, watchList, onWatchListToggle }) => {
     return (
         <Box sx={{ marginBottom: 4 }}>
 
@@ -19,27 +20,12 @@ const MovieRow = ({title, movies}) => {
                 }} 
             >
                 {movies?.map((movie)=> (
-                    <Card
-                    key={movie.id}
-                    sx={{
-                      minWidth: 180,
-                      backgroundColor: '#222',
-                      color: 'white',
-                      flex: '0 0 auto',
-                    }}
-                    >
-                    <CardMedia
-                        component="img"
-                        height="270"
-                        image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                        alt={movie.title || movie.name}
+                    <MovieCard 
+                        key={movie.id} 
+                        movie={movie} 
+                        onWatchListToggle={onWatchListToggle} 
+                        isInWatchList={(id) => watchList.includes(id)}
                     />
-                     <CardContent sx={{ padding: 1 }}>
-                       <Typography variant="body2" noWrap>
-                        {movie.title || movie.name}
-                       </Typography>
-                     </CardContent>
-                    </Card>
                 ))}
             </Box>
         </Box>
