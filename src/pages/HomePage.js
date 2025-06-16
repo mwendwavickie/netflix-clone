@@ -13,6 +13,7 @@ const HomePage = () => {
     const [trending, setTrending] = useState([]);
     const [topRated, setTopRated] = useState([]);
     const [actionMovies, setActionMovies] = useState([]);
+    const [watchList, setWatchList] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +35,16 @@ const HomePage = () => {
         
     }, []);
 
+    const toggleWatchList = (movie) => {
+        setWatchList((prev) => {
+            if (prev.find((m) => m.id === movie.id)) {
+                return prev.filter((m) => m.id !== movie.id);
+            } else {
+                return [...prev, movie];
+            }
+        });
+    };
+
     return (
         <Container 
         sx={{ 
@@ -43,9 +54,9 @@ const HomePage = () => {
         }}
         maxWidth="false"
         >
-            <MovieRow title="Trending Now" movies={trending} />
-            <MovieRow title="Top Rated" movies={topRated} />
-            <MovieRow title="Action Movies" movies={actionMovies} />
+            <MovieRow title="Trending Now" movies={trending} watchList={watchList} onWatchListToggle={toggleWatchList} />
+            <MovieRow title="Top Rated" movies={topRated} watchList={watchList} onWatchListToggle={toggleWatchList} />
+            <MovieRow title="Action Movies" movies={actionMovies} watchList={watchList} onWatchListToggle={toggleWatchList} />
 
         </Container>
     )
