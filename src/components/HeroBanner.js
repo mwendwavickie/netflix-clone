@@ -18,16 +18,17 @@ const HeroBanner = ({movie}) => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'flex-start',
             color: '#fff',
-            textAlign: 'center',
-            padding: 2,
+            textAlign: 'left',
+            px: { xs: 3, md: 10 },
         }}
         >
+            <Box sx={{ maxWidth: "600px" }}>
             <Typography variant="h2" component="h1" sx={{ marginBottom: 2 }}>
                 {movie.title || movie.name}
             </Typography>
-            <Typography variant="h5" sx={{ marginBottom: 3 }}>
+            <Typography variant="h6" sx={{ marginBottom: 3, color: "rgba(255,255,255,0.9)" }}>
                 {movie.overview}
             </Typography>
             <Button 
@@ -37,6 +38,7 @@ const HeroBanner = ({movie}) => {
             >
                 Watch Now
             </Button>
+            </Box>
 
         </Box>
     )
