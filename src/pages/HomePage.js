@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Container } from "@mui/material";
 import MovieRow from "../components/MovieRow";
+import HeroBanner from "../components/HeroBanner";
 
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -54,6 +55,7 @@ const HomePage = () => {
         }}
         maxWidth="false"
         >
+            <HeroBanner movie={trending[0]} />
             <MovieRow title="Trending Now" movies={trending} watchList={watchList} onWatchListToggle={toggleWatchList} />
             <MovieRow title="Top Rated" movies={topRated} watchList={watchList} onWatchListToggle={toggleWatchList} />
             <MovieRow title="Action Movies" movies={actionMovies} watchList={watchList} onWatchListToggle={toggleWatchList} />
