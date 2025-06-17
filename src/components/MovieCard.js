@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardMedia, IconButton, Box, Tooltip } from '@mui/material';
+import { Card, CardMedia, CardContent, IconButton, Box, Tooltip, Typography } from '@mui/material';
 import { FavoriteBorder, Favorite } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,6 +25,13 @@ const MovieCard = ({movie, onWatchListToggle, isInWatchList }) => {
                 image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title || movie.name}
             />
+
+            <CardContent sx={{ padding: 1 }}>
+                <Typography variant="body2" noWrap>
+                    {movie.title || movie.name}
+                </Typography>
+            </CardContent>
+                        
 
             <Box
                 className="hoverIcon"
