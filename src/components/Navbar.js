@@ -1,0 +1,79 @@
+import React, {useState } from "react";
+import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+
+
+
+const Navbar = () => {
+    const navigate = useNavigate();
+    const [query, setQuery] = useState("");
+    
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (query.trim()) {
+            navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+            setQuery("");
+        }
+    };
+
+    return(
+        <AppBar 
+        position="sticky" 
+        sx={{
+            backgroundColor:"#141414",
+            paddingX:2,
+            }}
+        >
+            <Toolbar disableGutters sx={{justifyContent:"space-between"}}>
+                <Typography
+                    variant="h6"
+                    component={Link}
+                    to="/"
+                    sx={{
+                    textDecoration: "none",
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "1.5rem",
+                    }}
+                >
+                    🎬 Streamify
+                </Typography>
+
+                <Box sx={{display:"flex", gap:2}}>
+                    <Button component={Link} to='/' sx={{color:"white"}}> Home </Button>
+                    <Button component={Link} to='/movies' sx={{color:"white"}}> Movies </Button>
+                </Box>
+
+                {/* Search Field */}
+                <Box component="form" onSubmit={handleSearch} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <TextField
+                    variant="outlined"
+                    size="small"
+                    placeholder="Search movies or genres"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    sx={{
+                    input: { color: "white" },
+                    "& .MuiOutlinedInput-root": {
+                        backgroundColor: "#222",
+                        borderRadius: 7,
+                    },
+                    }}
+                />
+                <IconButton type="submit" sx={{ color: "white" }}>
+                    <SearchIcon />
+                </IconButton>
+                </Box>
+
+                {/*Auth buttons */}    
+                <Box sx={{display:"flex", gap:1}}>
+                    <Button component={Link} to="/login" color="inherit" variant="outlined"> LOGIN </Button>
+                    <Button component={Link} to="/SignUp" color="secondary" variant="outlined"> SignUp </Button>
+                </Box>
+            </Toolbar>
+        </AppBar>
+    )
+
+}
+export default Navbar;

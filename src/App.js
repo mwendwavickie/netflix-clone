@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 
 
 
@@ -15,7 +16,7 @@ function App() {
      <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path='/login' element={<LoginPage />} />
-      <Route path='/signup' element={<div> signup page </div>} />
+      <Route path='/signup' element={<SignUpPage />} />
       <Route path="/movie/:id" element={<MovieDetailPage />} />
       <Route path="/search" element={<SearchResultsPage />} />
      </Routes>
