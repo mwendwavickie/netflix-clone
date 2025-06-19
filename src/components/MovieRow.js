@@ -1,8 +1,9 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, IconButton } from '@mui/material';
 import MovieCard from './MovieCard';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const MovieRow = ({title, movies, watchList, onWatchListToggle }) => {
+const MovieRow = ({title, movies, watchList, onWatchListToggle, onSeeMore }) => {
     return (
         <Box sx={{ marginBottom: 4 }}>
 
@@ -19,14 +20,27 @@ const MovieRow = ({title, movies, watchList, onWatchListToggle }) => {
                     '&::-webkit-scrollbar': { display: 'none' }, // hide scrollbar
                 }} 
             >
-                {movies?.map((movie)=> (
-                    <MovieCard 
-                        key={movie.id} 
-                        movie={movie} 
-                        onWatchListToggle={onWatchListToggle} 
-                        isInWatchList={(id) => watchList.includes(id)}
-                    />
+                {movies.map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} />
                 ))}
+                {/* Right arrow button */}
+                {onSeeMore && (
+                <IconButton
+                    onClick={onSeeMore}
+                    sx={{
+                    minWidth: 50,
+                    height: 50,
+                    alignSelf: 'center',
+                    color: 'white',
+                    border: '1px solid #555',
+                    '&:hover': {
+                        backgroundColor: '#333',
+                    },
+                    }}
+                >
+                    <ArrowForwardIosIcon />
+                </IconButton>
+                )}
             </Box>
         </Box>
     )
