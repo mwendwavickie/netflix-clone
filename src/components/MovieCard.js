@@ -2,9 +2,20 @@ import React from 'react';
 import { Card, CardMedia, CardContent, IconButton, Box, Tooltip, Typography } from '@mui/material';
 import { FavoriteBorder, Favorite } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useWatchLater } from '../context/WatchLaterContext';
 
-const MovieCard = ({movie, onWatchListToggle, isInWatchList }) => {
+const MovieCard = ({ movie }) => {
     const navigate = useNavigate();
+    const { addToWatchLater, removeFromWatchLater, isInWatchList, } = useWatchLater();
+
+    const handleToggle = (e) => {
+        e.stopPropagation(); // Prevent navigating to detail
+        if (isInWatchList(movie.id)) {
+          removeFromWatchLater(movie.id);
+        } else {
+          addToWatchLater(movie);
+        }
+      };
 
     return(
         <Card
@@ -15,7 +26,8 @@ const MovieCard = ({movie, onWatchListToggle, isInWatchList }) => {
                 flex: '0 0 auto',
                 position: 'relative',
                 cursor: 'pointer',
-                '&:hover .hoverIcon': {opacity:1},
+                "&:hover": { transform: "scale(1.05)" },
+                transition: "transform 0.2s",
             }}
             onClick={() => navigate(`/movie/${movie.id}`)}
         >
@@ -33,25 +45,22 @@ const MovieCard = ({movie, onWatchListToggle, isInWatchList }) => {
             </CardContent>
                         
 
+            {/* Watch Later Heart Icon */}
             <Box
-                className="hoverIcon"
                 sx={{
-                    position: 'absolute',
-                    top: 10,
-                    right: 10,
-                    opacity: 0,
-                    transition: 'opacity 0.3s ease',
-                    zIndex: 1,
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                zIndex: 2,
                 }}
-                onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click
-                    onWatchListToggle(movie.id);
-                }}
+                onClick={handleToggle}
             >
-                <Tooltip title={isInWatchList(movie.id) ? "Remove from Watchlist" : "Add to Watchlist"}>
-                    <IconButton sx={{ color: 'tomato' }}>
-                        {isInWatchList(movie.id) ? <Favorite /> : <FavoriteBorder />}
-                    </IconButton>
+                <Tooltip
+                title={isInWatchList(movie.id) ? "Remove from Watchlist" : "Add to Watchlist"}
+                >
+                <IconButton sx={{ color: 'tomato' }}>
+                    {isInWatchList(movie.id) ? <Favorite /> : <FavoriteBorder />}
+                </IconButton>
                 </Tooltip>
             </Box>
         </Card>
