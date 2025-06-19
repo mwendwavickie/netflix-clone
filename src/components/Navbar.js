@@ -2,12 +2,15 @@ import React, {useState } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, TextField, IconButton } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
+import { useAuth } from "../context/AuthContext";
 
 
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { user, logout } = useAuth();
     const [query, setQuery] = useState("");
+    
     
     const handleSearch = (e) => {
         e.preventDefault();
@@ -67,10 +70,16 @@ const Navbar = () => {
                 </Box>
 
                 {/*Auth buttons */}    
-                <Box sx={{display:"flex", gap:1}}>
-                    <Button component={Link} to="/login" color="inherit" variant="outlined"> LOGIN </Button>
-                    <Button component={Link} to="/SignUp" color="secondary" variant="outlined"> SignUp </Button>
-                </Box>
+                {user ? (
+                    <Button color="inherit" onClick={logout}>
+                        Logout
+                    </Button>
+                    ) : (
+                    <>
+                        <Button component={Link} to="/login">Login</Button>
+                        <Button component={Link} to="/signup">Sign Up</Button>
+                    </>
+                    )}
             </Toolbar>
         </AppBar>
     )
