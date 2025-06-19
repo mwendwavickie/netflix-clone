@@ -57,6 +57,7 @@ const MoviesPage = () => {
                     title={genre}
                     movies={genreMovies[genre] || []}
                     onSeeMore={() => loadMore(genre)} // Pass the handler here
+                    loading={!genreMovies[genre]} // Pass loading flag
                     />
                 </Box>
             ))}
