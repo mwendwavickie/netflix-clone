@@ -1,24 +1,50 @@
 import React, {useState} from "react";
 import {Box, Container, Typography, TextField, Button, Link, Paper} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUpPage = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState({email: "", password: "", confirmPassword: ""});
 
-    const handleSignup = (e) => {
-        e.preventDefault();
-            if (password !== confirmPassword) {
-            alert("Passwords do not match!");
-            return;
-            }
-            // TODO: Add Firebase or backend signup logic here
-            console.log("Sign Up:", { email, password });
+    const validate = () => {
+      const err = {};
+      if (!email.includes("@")) err.email = "Invalid email address";
+      if (password.length < 6) err.password = "Password too short";
+      if (password !== confirmPassword) err.confirmPassword = "Passwords do not match";
+      setError(err);
+      return Object.keys(err).length === 0;
     }
+
+    const handleSignup = async(e) => {
+      e.preventDefault();
+      if (!validate()) return;
+            
+            // TODO: Add Firebase or backend signup logic here
+            try{
+              await createUserWithEmailAndPassword(auth, email, password);
+              navigate("/");
+            }catch (err){
+              if (err.code === "auth/email-already-in-use") {
+                setError({ email: "Email already in use"});
+              }else {
+                alert("Signup failed: " + err.message);
+              }
+            }
+          }
+            
+          if (user) {
+            navigate("/");
+            return null;
+          }
+    
 
     return (
         <Box
@@ -51,12 +77,10 @@ const SignUpPage = () => {
               variant="filled"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              sx={{
-                mb: 2,
-                input: { color: "white" },
-                label: { color: "#aaa" },
-                backgroundColor: "#333",
-              }}
+              error={!!error.email}
+              helperText={error.email}
+              sx={{ my: 2, backgroundColor: "#333", input: { color: "white" }, label: { color: "#aaa" } }}
+              
             />
             <TextField
               label="Password"
@@ -65,12 +89,9 @@ const SignUpPage = () => {
               variant="filled"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              sx={{
-                mb: 2,
-                input: { color: "white" },
-                label: { color: "#aaa" },
-                backgroundColor: "#333",
-              }}
+              error={!!error.password}
+              helperText={error.password}
+              sx={{ my: 2, backgroundColor: "#333", input: { color: "white" }, label: {color:"#aaa"} }}
             />
             <TextField
               label="Confirm Password"
@@ -79,12 +100,9 @@ const SignUpPage = () => {
               variant="filled"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              sx={{
-                mb: 3,
-                input: { color: "white" },
-                label: { color: "#aaa" },
-                backgroundColor: "#333",
-              }}
+              error={!!error.confirmPassword}
+              helperText={error.confirmPassword}
+              sx={{ my: 2, backgroundColor: "#333", input: { color: "white" }, label: { color: "#aaa"} }}
             />
 
             <Button
@@ -114,7 +132,6 @@ const SignUpPage = () => {
       </Box>
 
     )
-
 
 }
 export default SignUpPage;
