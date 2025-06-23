@@ -9,6 +9,8 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import WatchListPage from './pages/WatchlistPage';
 import PrivateRoute from './components/PrivateRoute';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -16,6 +18,7 @@ function App() {
   return (
     <Router>
       <Navbar />
+      <ToastContainer position="top-right" theme="dark" autoClose={2000} />
      <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/movies" element={<MoviesPage />} />
