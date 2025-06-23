@@ -1,72 +1,104 @@
-import React, {useState} from "react";
-import {Box, Container, Typography, TextField, Button, Link, Paper} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Link,
+  Paper
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUpPage = () => {
-    const navigate = useNavigate();
-    const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState({email: "", password: "", confirmPassword: ""});
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-    const validate = () => {
-      const err = {};
-      if (!email.includes("@")) err.email = "Invalid email address";
-      if (password.length < 6) err.password = "Password too short";
-      if (password !== confirmPassword) err.confirmPassword = "Passwords do not match";
-      setError(err);
-      return Object.keys(err).length === 0;
+  const validate = () => {
+    const err = {};
+    if (!email.includes("@")) err.email = "Invalid email address";
+    if (password.length < 6) err.password = "Password too short";
+    if (password !== confirmPassword)
+      err.confirmPassword = "Passwords do not match";
+    setError(err);
+    return Object.keys(err).length === 0;
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate("/");
+    } catch (err) {
+      if (err.code === "auth/email-already-in-use") {
+        setError({ email: "Email already in use" });
+      } else {
+        alert("Signup failed: " + err.message);
+      }
     }
+  };
 
-    const handleSignup = async(e) => {
-      e.preventDefault();
-      if (!validate()) return;
-            
-            // TODO: Add Firebase or backend signup logic here
-            try{
-              await createUserWithEmailAndPassword(auth, email, password);
-              navigate("/");
-            }catch (err){
-              if (err.code === "auth/email-already-in-use") {
-                setError({ email: "Email already in use"});
-              }else {
-                alert("Signup failed: " + err.message);
-              }
-            }
-          }
-            
-          if (user) {
-            navigate("/");
-            return null;
-          }
-    
+  if (user) {
+    navigate("/");
+    return null;
+  }
 
-    return (
-        <Box
+  return (
+    <Box
       sx={{
         minHeight: "100vh",
         backgroundColor: "#141414",
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9))`,
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95))",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        py: 8,
+        px: 2,
       }}
     >
-      <Container maxWidth="sm">
-        <Paper elevation={6} sx={{ p: 4, backgroundColor: "#1c1c1c" }}>
+      <Container maxWidth="xs">
+        <Paper
+          elevation={6}
+          sx={{
+            p: 4,
+            backgroundColor: "rgba(28,28,28,0.95)",
+            backdropFilter: "blur(6px)",
+            borderRadius: 2,
+            boxShadow: "0 0 12px rgba(0,0,0,0.5)",
+          }}
+        >
           <Typography
             variant="h4"
             align="center"
             gutterBottom
-            sx={{ color: "white", fontWeight: "bold" }}
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              textShadow: "1px 1px 4px rgba(255,0,0,0.4)",
+            }}
           >
-            Create Account
+            Create Your Account
+          </Typography>
+
+          <Typography
+            align="center"
+            variant="subtitle2"
+            sx={{ color: "#ccc", mb: 3 }}
+          >
+            Join Streamify and start streaming now
           </Typography>
 
           <form onSubmit={handleSignup}>
@@ -79,9 +111,14 @@ const SignUpPage = () => {
               onChange={(e) => setEmail(e.target.value)}
               error={!!error.email}
               helperText={error.email}
-              sx={{ my: 2, backgroundColor: "#333", input: { color: "white" }, label: { color: "#aaa" } }}
-              
+              sx={{
+                mb: 2,
+                backgroundColor: "#333",
+                input: { color: "white" },
+                label: { color: "#aaa" },
+              }}
             />
+
             <TextField
               label="Password"
               type="password"
@@ -91,8 +128,14 @@ const SignUpPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               error={!!error.password}
               helperText={error.password}
-              sx={{ my: 2, backgroundColor: "#333", input: { color: "white" }, label: {color:"#aaa"} }}
+              sx={{
+                mb: 2,
+                backgroundColor: "#333",
+                input: { color: "white" },
+                label: { color: "#aaa" },
+              }}
             />
+
             <TextField
               label="Confirm Password"
               type="password"
@@ -102,7 +145,12 @@ const SignUpPage = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               error={!!error.confirmPassword}
               helperText={error.confirmPassword}
-              sx={{ my: 2, backgroundColor: "#333", input: { color: "white" }, label: { color: "#aaa"} }}
+              sx={{
+                mb: 3,
+                backgroundColor: "#333",
+                input: { color: "white" },
+                label: { color: "#aaa" },
+              }}
             />
 
             <Button
@@ -111,7 +159,13 @@ const SignUpPage = () => {
               variant="contained"
               color="error"
               size="large"
-              sx={{ mb: 2 }}
+              sx={{
+                mb: 2,
+                textTransform: "none",
+                fontWeight: "bold",
+                fontSize: "1rem",
+                letterSpacing: 0.5,
+              }}
             >
               Sign Up
             </Button>
@@ -129,9 +183,8 @@ const SignUpPage = () => {
           </Typography>
         </Paper>
       </Container>
-      </Box>
+    </Box>
+  );
+};
 
-    )
-
-}
 export default SignUpPage;

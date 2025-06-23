@@ -1,4 +1,3 @@
-// MovieCard.js
 import React from 'react';
 import {
   Card, CardMedia, CardContent, IconButton,
@@ -28,54 +27,114 @@ const MovieCard = ({ movie, isWatchlistPage = false }) => {
       }
     }
   };
+
   return (
     <Card
       sx={{
         minWidth: 180,
-        backgroundColor: '#222',
+        backgroundColor: '#111',
         color: 'white',
         flex: '0 0 auto',
         position: 'relative',
         cursor: 'pointer',
-        "&:hover": { transform: "scale(1.05)" },
-        transition: "transform 0.2s",
+        transition: 'transform 0.3s ease',
+        borderRadius: 3,
+        boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
+        overflow: 'hidden',
         height: '100%',
       }}
       onClick={() => navigate(`/movie/${movie.id}`)}
     >
-      <CardMedia
-        component="img"
-        height="270"
-        image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-        alt={movie.title || movie.name}
-      />
+      {/* Movie Poster */}
+      <Box sx={{ position: "relative" }}>
+        <CardMedia
+          component="img"
+          height="270"
+          image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          alt={movie.title || movie.name}
+        />
 
+        {/* Overlay Gradient */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            height: "50%",
+            background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
+          }}
+        />
+
+        {/* Title Overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 8,
+            left: 8,
+            right: 8,
+            zIndex: 2,
+          }}
+        >
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: 600,
+              color: "#fff",
+              textShadow: "0 0 5px rgba(0,0,0,0.8)",
+            }}
+            noWrap
+          >
+            {movie.title || movie.name}
+          </Typography>
+        </Box>
+
+        {/* Action Icon */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            zIndex: 3,
+          }}
+          onClick={handleClick}
+        >
+          <Tooltip
+            title={
+              isWatchlistPage
+                ? "Remove from Watchlist"
+                : isInWatchList(movie.id)
+                ? "Remove from Watchlist"
+                : "Add to Watchlist"
+            }
+          >
+            <IconButton
+              sx={{
+                backgroundColor: "rgba(0,0,0,0.6)",
+                color: 'tomato',
+                '&:hover': {
+                  backgroundColor: "rgba(255,255,255,0.2)",
+                },
+              }}
+            >
+              {isWatchlistPage
+                ? <Delete />
+                : isInWatchList(movie.id)
+                  ? <Favorite />
+                  : <FavoriteBorder />}
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Box>
+
+      {/* Optional Extra Details (genres or year) */}
       <CardContent sx={{ padding: 1 }}>
-        <Typography variant="body2" noWrap>
-          {movie.title || movie.name}
+        <Typography variant="caption" sx={{ color: "#bbb" }}>
+          {movie.release_date?.split('-')[0] || ' '}
         </Typography>
       </CardContent>
-
-      {/* Remove or Watchlist toggle */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          zIndex: 1,
-        }}
-        onClick={handleClick}
-      >
-        <Tooltip title={isWatchlistPage ? "Remove from Watchlist" : isInWatchList(movie.id) ? "Remove from Watchlist" : "Add to Watchlist"}>
-          <IconButton sx={{ color: 'tomato' }}>
-            {isWatchlistPage
-              ? <Delete />
-              : isInWatchList(movie.id)
-                ? <Favorite />
-                : <FavoriteBorder />}
-          </IconButton>
-        </Tooltip>
-      </Box>
     </Card>
   );
 };

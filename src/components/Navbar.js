@@ -49,9 +49,15 @@ const Navbar = () => {
           component={Link}
           to={path}
           sx={{
-            color: isActive(path) ? "red" : "white",
+            color: isActive(path) ? "tomato" : "#ddd",
             fontWeight: isActive(path) ? "bold" : "normal",
-            "&:hover": { color: "tomato" },
+            borderBottom: isActive(path) ? "2px solid tomato" : "2px solid transparent",
+            borderRadius: 0,
+            transition: "all 0.3s ease",
+            "&:hover": {
+              color: "tomato",
+              borderBottom: "2px solid tomato"
+            },
           }}
         >
           {name}
@@ -61,7 +67,7 @@ const Navbar = () => {
   );
 
   return (
-    <AppBar position="sticky" sx={{ backgroundColor: "#141414", px: 2 }}>
+    <AppBar position="sticky" sx={{ backgroundColor: "#121212", px: 2, boxShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
       <Toolbar sx={{ justifyContent: "space-between", flexWrap: "wrap" }}>
         {/* Logo */}
         <Typography
@@ -70,15 +76,16 @@ const Navbar = () => {
           to="/"
           sx={{
             textDecoration: "none",
-            color: "red",
+            color: "tomato",
             fontWeight: "bold",
-            fontSize: "1.6rem",
+            fontSize: "1.8rem",
+            letterSpacing: 1,
           }}
         >
           🎬 Streamify
         </Typography>
 
-        {/* Desktop Nav Links */}
+        {/* Desktop Nav */}
         {!isMobile && (
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             {renderButtons()}
@@ -90,37 +97,48 @@ const Navbar = () => {
           <Box
             component="form"
             onSubmit={handleSearch}
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              ml: 2,
+              flexGrow: 1,
+              maxWidth: 350
+            }}
           >
             <TextField
               variant="outlined"
               size="small"
-              placeholder="Search..."
+              placeholder="Search movies..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               sx={{
                 input: { color: "white" },
+                width: "100%",
                 "& .MuiOutlinedInput-root": {
-                  backgroundColor: "#222",
-                  borderRadius: 5,
+                  backgroundColor: "#1e1e1e",
+                  borderRadius: 4,
+                  "& fieldset": { borderColor: "#333" },
+                  "&:hover fieldset": { borderColor: "tomato" },
+                  "&.Mui-focused fieldset": { borderColor: "tomato" }
                 },
               }}
             />
-            <IconButton type="submit" sx={{ color: "white" }}>
+            <IconButton type="submit" sx={{ color: "tomato" }}>
               <SearchIcon />
             </IconButton>
           </Box>
         )}
 
-        {/* Desktop Auth / Avatar */}
+        {/* User Auth / Avatar */}
         {!isMobile && (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {user ? (
               <>
-                <Tooltip title={user.email || "User"}>
+                <Tooltip title={user.email}>
                   <IconButton onClick={handleMenuOpen} sx={{ ml: 2 }}>
-                    <Avatar sx={{ bgcolor: "tomato" }}>
-                      {user?.email?.[0]?.toUpperCase() || "U"}
+                    <Avatar sx={{ bgcolor: "tomato", width: 32, height: 32, fontSize: 14 }}>
+                      {user.email?.[0]?.toUpperCase() || "U"}
                     </Avatar>
                   </IconButton>
                 </Tooltip>
@@ -128,13 +146,12 @@ const Navbar = () => {
                   anchorEl={anchorEl}
                   open={open}
                   onClose={handleMenuClose}
-                  onClick={handleMenuClose}
                   PaperProps={{
-                    elevation: 2,
                     sx: {
                       mt: 1.5,
                       bgcolor: "#1f1f1f",
                       color: "white",
+                      minWidth: 150,
                       "& .MuiMenuItem-root": {
                         "&:hover": { bgcolor: "#333" },
                       },
@@ -151,9 +168,10 @@ const Navbar = () => {
                   component={Link}
                   to="/login"
                   sx={{
-                    backgroundColor: "transparent",
                     border: "1px solid tomato",
                     color: "white",
+                    borderRadius: 3,
+                    px: 2,
                     "&:hover": { backgroundColor: "tomato" },
                   }}
                 >
@@ -165,6 +183,8 @@ const Navbar = () => {
                   sx={{
                     backgroundColor: "tomato",
                     color: "white",
+                    borderRadius: 3,
+                    px: 2,
                     "&:hover": { backgroundColor: "red" },
                   }}
                 >
@@ -175,7 +195,7 @@ const Navbar = () => {
           </Box>
         )}
 
-        {/* Hamburger for Mobile */}
+        {/* Mobile Hamburger */}
         {isMobile && (
           <IconButton color="inherit" onClick={() => setDrawerOpen(true)}>
             <MenuIcon />
@@ -191,7 +211,7 @@ const Navbar = () => {
         sx={{ display: { md: "none" } }}
       >
         <Box sx={{ width: 250, p: 2, backgroundColor: '#111', height: '100%' }}>
-          <Typography variant="h6" sx={{ mb: 2, color: "red" }}>Menu</Typography>
+          <Typography variant="h6" sx={{ mb: 2, color: "tomato" }}>Menu</Typography>
           <List>
             {navItems.map(({ name, path }) => (
               <ListItem
@@ -201,7 +221,7 @@ const Navbar = () => {
                 to={path}
                 onClick={() => setDrawerOpen(false)}
                 sx={{
-                  color: isActive(path) ? "red" : "white",
+                  color: isActive(path) ? "tomato" : "white",
                   fontWeight: isActive(path) ? "bold" : "normal",
                 }}
               >
