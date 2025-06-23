@@ -8,13 +8,13 @@ export const WatchLaterProvider = ({ children }) => {
     const [watchList, setWatchList] = useState([]);
 
     const addToWatchLater = (movie) => {
-        if(!watchList.find((m) => m.id === movie.id)) {
-            setWatchList([...watchList, movie]);
-        }
-    };
-    const removeFromWatchLater = (id) => {
-        setWatchList(watchList.filter ((m) => m.id !== id));
-    };
+        setWatchList((prev) =>
+          prev.find((m) => m.id === movie.id) ? prev : [...prev, movie]
+        );
+      };      
+      const removeFromWatchLater = (id) => {
+        setWatchList((prev) => prev.filter((m) => m.id !== id));
+      };      
     const isInWatchList = (movieId) => {
         return watchList.some((m) => m.id === movieId);
       };
