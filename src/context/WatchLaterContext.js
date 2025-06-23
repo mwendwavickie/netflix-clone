@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { db } from "../firebase";
+import {doc, getDoc, setDoc, updateDoc, } from "firebase/firestore";
+import { useAuth } from './AuthContext';
 
 const WatchLaterContext = createContext();
 
@@ -6,6 +9,32 @@ export const useWatchLater = () => useContext(WatchLaterContext);
 
 export const WatchLaterProvider = ({ children }) => {
     const [watchList, setWatchList] = useState([]);
+    const { currentUser } = useAuth();
+
+    // Fetch on login
+    useEffect(() => {
+      const fetchWatchlist = async () => {
+        if (currentUser) {
+          const docRef = doc(db, "watchlists", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setWatchList(docSnap.data().movies || []);
+          }
+        }
+      };
+      fetchWatchlist();
+    }, [currentUser]);
+
+    //Sync to Firestore
+    useEffect(() => {
+      const saveToFirestore = async () => {
+        if (currentUser) {
+          const docRef = doc(db, "watchlists", currentUser.uid);
+          await setDoc(docRef, { movies: watchList });
+        }
+      };
+      saveToFirestore();
+    }, [watchList, currentUser]);
 
     const addToWatchLater = (movie) => {
         setWatchList((prev) =>
@@ -20,7 +49,7 @@ export const WatchLaterProvider = ({ children }) => {
       };
 
     return (
-        <WatchLaterContext.Provider value={{ watchList, addToWatchLater, removeFromWatchLater, isInWatchList }} >
+        <WatchLaterContext.Provider value={{ watchList, addToWatchLater, removeFromWatchLater, isInWatchList, setWatchList }} >
             {children}
         </WatchLaterContext.Provider>
     )
