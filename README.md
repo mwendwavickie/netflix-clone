@@ -1,70 +1,87 @@
-# Getting Started with Create React App
+# STREAMIFY APP - Netflix-clone
+Streamify is a responsive, mobile-first movie streaming web application built with React, Firebase, and TMDB API. It allows users to explore movies, view details, add to watchlist, and stream trailers — all within a sleek, Netflix-inspired interface.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Features
+🔐 Authentication with Firebase (Login / Signup)
 
-## Available Scripts
+🧑 User Profiles with persistent sessions
 
-In the project directory, you can run:
+📽️ Movie Listings by Genre
 
-### `npm start`
+🎞️ Detailed Movie Pages with trailers, overview, runtime, rating, and cast
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+❤️ Add to Watchlist (only for logged in users)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🔍 Search Movies by title or genre
 
-### `npm test`
+📱 Responsive UI for all screen sizes (Mobile, Tablet, Desktop)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🧭 Navigation Drawer with active page highlighting and user avatar
 
-### `npm run build`
+💾 Persistent Watchlist with “Remove” and “Clear All” options
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🔔 Toast Notifications and Confirmation Dialogs for interactions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+🎬 See More Button for paginated genre-based movie rows
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🧠 Context APIs for global auth and watchlist state management
 
-### `npm run eject`
+## Tech Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+| Tech                        | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| **React.js**                | Frontend UI framework                          |
+| **Firebase Auth**           | Authentication and watchlist storage           |
+| **TMDB API**                | Fetch movie data, genres, trailers, cast       |
+| **Material-UI (MUI)**       | Responsive and accessible UI components        |
+| **React Router**            | Navigation between pages                       |
+| **React Context API**       | Global state management for auth and watchlist |
+| **Toastify / MUI Snackbar** | Notifications and alerts                       |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Installation
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# 1. Clone the repository
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+git clone https://github.com/mwendwavickie/netflix-clone.git
+cd netflix-clone
 
-## Learn More
+# 2. Install dependancies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#  3.Set up environment Variables
 
-### Code Splitting
+Create a .env file in the root folder:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+touch .env
 
-### Analyzing the Bundle Size
+REACT_APP_TMDB_KEY=your_tmdb_api_key
+REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Start the app 
+npm start
 
-### Making a Progressive Web App
+## Future Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Support for multiple user profiles
 
-### Advanced Configuration
+Dark/light theme toggle
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Ratings and reviews system
 
-### Deployment
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Contributions are welcome! Please open an issue or pull request for improvements or bug fixes.
 
-### `npm run build` fails to minify
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT License
+
+
+
+
+
+
