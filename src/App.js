@@ -7,6 +7,8 @@ import MovieDetailPage from './pages/MovieDetailPage';
 import SearchResultsPage from './pages/SearchResultsPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import WatchListPage from './pages/WatchlistPage';
+import PrivateRoute from './components/PrivateRoute';
 
 
 
@@ -21,6 +23,13 @@ function App() {
       <Route path='/signup' element={<SignUpPage />} />
       <Route path="/movie/:id" element={<MovieDetailPage />} />
       <Route path="/search" element={<SearchResultsPage />} />
+      <Route path="/watchlist" 
+        element={
+        <PrivateRoute>
+          <WatchListPage />
+        </PrivateRoute>
+        }
+      />
      </Routes>
    </Router>
   );
