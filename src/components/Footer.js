@@ -20,7 +20,7 @@ const Footer = () => {
         <Typography variant="caption" display="block" sx={{ mt: 1 }}>
           Built with ❤️ using React & TMDB API |
           <Link
-            href="https://github.com/your-username/streamify"
+            href="https://github.com/mwendwavickie/netflix-clone"
             target="_blank"
             rel="noopener"
             color="inherit"

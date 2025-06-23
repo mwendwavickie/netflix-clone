@@ -1,6 +1,8 @@
 # STREAMIFY APP - Netflix-clone
 Streamify is a responsive, mobile-first movie streaming web application built with React, Firebase, and TMDB API. It allows users to explore movies, view details, add to watchlist, and stream trailers — all within a sleek, Netflix-inspired interface.
 
+![Streamify](image.png)
+
 ## Features
 🔐 Authentication with Firebase (Login / Signup)
 
