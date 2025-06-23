@@ -46,6 +46,11 @@ const Navbar = () => {
                 <Box sx={{display:"flex", gap:2}}>
                     <Button component={Link} to='/' sx={{color:"white"}}> Home </Button>
                     <Button component={Link} to='/movies' sx={{color:"white"}}> Movies </Button>
+                    {user && (
+                        <Button component={Link} to='/watchlist' sx={{ color: 'white' }}>
+                            Watchlist
+                        </Button>
+                        )}
                 </Box>
 
                 {/* Search Field */}
