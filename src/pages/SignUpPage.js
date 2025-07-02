@@ -6,8 +6,14 @@ import {
   TextField,
   Button,
   Link,
-  Paper
+  Paper,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import {
+  Visibility,
+  VisibilityOff
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { auth } from "../firebase";
@@ -20,6 +26,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState({
     email: "",
     password: "",
@@ -62,7 +69,7 @@ const SignUpPage = () => {
       sx={{
         minHeight: "100vh",
         backgroundColor: "#141414",
-        backgroundImage: "linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.95))",
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95))",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -71,13 +78,13 @@ const SignUpPage = () => {
     >
       <Container maxWidth="xs">
         <Paper
-          elevation={6}
+          elevation={8}
           sx={{
             p: 4,
             backgroundColor: "rgba(28,28,28,0.95)",
+            borderRadius: 3,
+            boxShadow: "0 0 20px rgba(0,0,0,0.6)",
             backdropFilter: "blur(6px)",
-            borderRadius: 2,
-            boxShadow: "0 0 12px rgba(0,0,0,0.5)",
           }}
         >
           <Typography
@@ -87,7 +94,7 @@ const SignUpPage = () => {
             sx={{
               color: "white",
               fontWeight: "bold",
-              textShadow: "1px 1px 4px rgba(255,0,0,0.4)",
+              textShadow: "1px 1px 6px rgba(255,0,0,0.4)",
             }}
           >
             Create Your Account
@@ -98,7 +105,7 @@ const SignUpPage = () => {
             variant="subtitle2"
             sx={{ color: "#ccc", mb: 3 }}
           >
-            Join Streamify and start streaming now
+            Join Streamify and start streaming instantly
           </Typography>
 
           <form onSubmit={handleSignup}>
@@ -121,7 +128,7 @@ const SignUpPage = () => {
 
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               fullWidth
               variant="filled"
               value={password}
@@ -134,11 +141,24 @@ const SignUpPage = () => {
                 input: { color: "white" },
                 label: { color: "#aaa" },
               }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      sx={{ color: "#aaa" }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <TextField
               label="Confirm Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               fullWidth
               variant="filled"
               value={confirmPassword}
@@ -150,6 +170,19 @@ const SignUpPage = () => {
                 backgroundColor: "#333",
                 input: { color: "white" },
                 label: { color: "#aaa" },
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      sx={{ color: "#aaa" }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
 
@@ -164,14 +197,13 @@ const SignUpPage = () => {
                 textTransform: "none",
                 fontWeight: "bold",
                 fontSize: "1rem",
-                letterSpacing: 0.5,
               }}
             >
               Sign Up
             </Button>
           </form>
 
-          <Typography align="center" sx={{ color: "#aaa" }}>
+          <Typography align="center" sx={{ color: "#aaa", mt: 2 }}>
             Already have an account?{" "}
             <Link
               underline="hover"

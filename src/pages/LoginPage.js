@@ -6,8 +6,16 @@ import {
   TextField,
   Typography,
   Link,
-  Paper
+  Paper,
+  IconButton,
+  InputAdornment,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
+import {
+  Visibility,
+  VisibilityOff
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
@@ -19,13 +27,14 @@ const LoginPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState({ email: "", password: "" });
 
   const validate = () => {
     const newError = {};
     if (!email.includes("@")) newError.email = "Invalid email address";
-    if (password.length < 6)
-      newError.password = "Password must be at least 6 characters";
+    if (password.length < 6) newError.password = "Password must be at least 6 characters";
     setError(newError);
     return Object.keys(newError).length === 0;
   };
@@ -36,6 +45,12 @@ const LoginPage = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Optionally store session
+      if (rememberMe) {
+        localStorage.setItem("rememberEmail", email);
+      } else {
+        localStorage.removeItem("rememberEmail");
+      }
       navigate("/");
     } catch (err) {
       if (err.code === "auth/user-not-found") {
@@ -58,7 +73,6 @@ const LoginPage = () => {
       sx={{
         minHeight: "100vh",
         background: "linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,1))",
-        backgroundColor: "#141414",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -72,8 +86,8 @@ const LoginPage = () => {
             p: 4,
             background: "rgba(28,28,28,0.95)",
             backdropFilter: "blur(6px)",
-            borderRadius: 2,
-            boxShadow: "0 0 12px rgba(0,0,0,0.5)",
+            borderRadius: 3,
+            boxShadow: "0 0 12px rgba(0,0,0,0.6)",
           }}
         >
           <Typography
@@ -117,7 +131,7 @@ const LoginPage = () => {
 
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               fullWidth
               variant="filled"
               value={password}
@@ -125,11 +139,40 @@ const LoginPage = () => {
               error={!!error.password}
               helperText={error.password}
               sx={{
-                mb: 3,
+                mb: 1,
                 backgroundColor: "#333",
                 input: { color: "white" },
                 label: { color: "#aaa" },
               }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                      sx={{ color: "#aaa" }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  sx={{ color: "#f44336" }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: "#bbb" }}>
+                  Remember me
+                </Typography>
+              }
+              sx={{ mb: 2 }}
             />
 
             <Button
