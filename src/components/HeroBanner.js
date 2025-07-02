@@ -10,7 +10,7 @@ const HeroBanner = ({ movie }) => {
     <Box
       sx={{
         position: "relative",
-        height: { xs: "60vh", md: "80vh" },
+        height: { xs: "60vh", md: "70vh" },
         backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
