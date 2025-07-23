@@ -8,44 +8,51 @@ import HeroBanner from "../components/HeroBanner";
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
-// Endpoints for fetching movie categories
-const TRENDING_URL = `${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=en-US`;
-const TOPRATED_URL = `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=en-US`;
-const ACTION_URL = `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=28&language=en-US`;
+// Genre URLs
+const ENDPOINTS = {
+  trending: `${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=en-US`,
+  topRated: `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=en-US`,
+  action: `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=28`,
+  comedy: `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=35`,
+  horror: `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=27`,
+  documentary: `${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=99`,
+};
 
 const HomePage = () => {
-  // State to hold fetched movie data
-  const [trending, setTrending] = useState([]);
-  const [topRated, setTopRated] = useState([]);
-  const [actionMovies, setActionMovies] = useState([]);
+  const [movies, setMovies] = useState({
+    trending: [],
+    topRated: [],
+    action: [],
+    comedy: [],
+    horror: [],
+    documentary: [],
+  });
 
-  // Optional local watchlist (for demo/demo UX)
   const [watchList, setWatchList] = useState([]);
 
-  // Fetch movie data when component mounts
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMovies = async () => {
       try {
-        // Fetch different movie categories in parallel
-        const [trendingRes, topRatedRes, actionRes] = await Promise.all([
-          axios.get(TRENDING_URL),
-          axios.get(TOPRATED_URL),
-          axios.get(ACTION_URL),
-        ]);
+        const responses = await Promise.all(
+          Object.values(ENDPOINTS).map((url) => axios.get(url))
+        );
 
-        // Set state with fetched results
-        setTrending(trendingRes.data.results);
-        setTopRated(topRatedRes.data.results);
-        setActionMovies(actionRes.data.results);
-      } catch (error) {
-        console.error("❌ Error fetching data from TMDB API:", error);
+        setMovies({
+          trending: responses[0].data.results,
+          topRated: responses[1].data.results,
+          action: responses[2].data.results,
+          comedy: responses[3].data.results,
+          horror: responses[4].data.results,
+          documentary: responses[5].data.results,
+        });
+      } catch (err) {
+        console.error("Error fetching movie categories:", err);
       }
     };
 
-    fetchData();
+    fetchMovies();
   }, []);
 
-  // Add or remove a movie from local watchList
   const toggleWatchList = (movie) => {
     setWatchList((prev) =>
       prev.find((m) => m.id === movie.id)
@@ -56,47 +63,70 @@ const HomePage = () => {
 
   return (
     <Container
-      maxWidth="false"
+      maxWidth={false}
       disableGutters
       sx={{
         backgroundColor: "#111",
         minHeight: "100vh",
-        paddingBottom: "40px",
+        paddingBottom: "60px",
         overflowX: "hidden",
       }}
     >
-      {/* 🎬 Hero Banner with the top trending movie */}
-      <HeroBanner movie={trending[0]} />
+      <HeroBanner movie={movies.trending[0]} />
 
-      {/* Movie Rows - Scrollable Sections */}
-      <Box sx={{ px: { xs: 2, sm: 4, md: 8 } }}>
+      <Box sx={{ px: { xs: 2, sm: 3, md: 8 }, mt: 4 }}>
         <MovieRow
-          title="🔥 Trending Now"
-          movies={trending}
+          title="Trending Now"
+          movies={movies.trending}
           watchList={watchList}
           onWatchListToggle={toggleWatchList}
         />
 
-        <Divider sx={{ my: 4, backgroundColor: "#444" }} />
+        <Divider sx={{ my: 4, backgroundColor: "#333" }} />
 
         <MovieRow
-          title="⭐ Top Rated"
-          movies={topRated}
+          title="Top Rated"
+          movies={movies.topRated}
           watchList={watchList}
           onWatchListToggle={toggleWatchList}
         />
 
-        <Divider sx={{ my: 4, backgroundColor: "#444" }} />
+        <Divider sx={{ my: 4, backgroundColor: "#333" }} />
 
         <MovieRow
-          title="💥 Action Movies"
-          movies={actionMovies}
+          title="Action Movies"
+          movies={movies.action}
+          watchList={watchList}
+          onWatchListToggle={toggleWatchList}
+        />
+
+        <Divider sx={{ my: 4, backgroundColor: "#333" }} />
+
+        <MovieRow
+          title="Comedy"
+          movies={movies.comedy}
+          watchList={watchList}
+          onWatchListToggle={toggleWatchList}
+        />
+
+        <Divider sx={{ my: 4, backgroundColor: "#333" }} />
+
+        <MovieRow
+          title="Horror"
+          movies={movies.horror}
+          watchList={watchList}
+          onWatchListToggle={toggleWatchList}
+        />
+
+        <Divider sx={{ my: 4, backgroundColor: "#333" }} />
+
+        <MovieRow
+          title="Documentaries"
+          movies={movies.documentary}
           watchList={watchList}
           onWatchListToggle={toggleWatchList}
         />
       </Box>
-
-      
     </Container>
   );
 };
