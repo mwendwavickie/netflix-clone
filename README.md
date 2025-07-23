@@ -44,7 +44,10 @@ Streamify is a responsive, mobile-first movie streaming web application built wi
 
 # 1. Clone the repository
 
-git clone https://github.com/mwendwavickie/netflix-clone.git
+git clone
+
+https://github.com/mwendwavickie/netflix-clone.git
+
 cd netflix-clone
 
 # 2. Install dependancies
