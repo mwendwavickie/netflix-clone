@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Container, Typography, Box, Stack, Chip, Button,
   Card, CardMedia, CardContent, Divider
@@ -9,7 +9,7 @@ import { useWatchLater } from "../context/WatchLaterContext";
 import { toast } from "react-toastify";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
@@ -18,6 +18,7 @@ const SIMILAR_MOVIES_URL = "https://api.themoviedb.org/3/movie/";
 
 const MovieDetailPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [trailer, setTrailer] = useState(null);
   const [cast, setCast] = useState([]);
@@ -28,7 +29,6 @@ const MovieDetailPage = () => {
   useEffect(() => {
     setIsInList(isInWatchList(id));
   }, [id, isInWatchList]);
-
 
   useEffect(() => {
     axios
@@ -59,7 +59,7 @@ const MovieDetailPage = () => {
 
   const handleWatchlistClick = () => {
     if (!movie) return;
-  
+
     if (isInList) {
       removeFromWatchLater(movie.id);
       toast.info("Removed from Watchlist");
@@ -69,16 +69,34 @@ const MovieDetailPage = () => {
     }
     setIsInList(!isInList);
   };
-  
 
   if (!movie)
     return <Typography sx={{ color: "white", textAlign: "center", mt: 10 }}>Loading movie details...</Typography>;
 
   return (
-    <Box sx={{ backgroundColor: "#121212", minHeight: "100vh", py: 5 }}>
+    <Box sx={{ backgroundColor: "#121212", minHeight: "100vh", py: 4 }}>
       <Container sx={{ color: "white" }}>
+        {/* Back Button */}
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate(-1)}
+          sx={{
+            mb: 2,
+            borderColor: "#888",
+            color: "#ccc",
+            ":hover": {
+              borderColor: "tomato",
+              backgroundColor: "#1e1e1e",
+              color: "white",
+            }
+          }}
+        >
+        Back
+        </Button>
+
         {/* Trailer or Banner */}
-        <Box sx={{ borderRadius: 2, overflow: "hidden", mb: 4 }}>
+        <Box sx={{ borderRadius: 2, overflow: "hidden", mb: 1 }}>
           {trailer ? (
             <Box sx={{ position: "relative", paddingTop: "56.25%" }}>
               <iframe
@@ -131,15 +149,15 @@ const MovieDetailPage = () => {
               {movie.overview}
             </Typography>
 
-            <Stack direction="row" spacing={3} sx={{ my: 2 }}>
-              <Typography><strong> Release:</strong> {movie.release_date}</Typography>
-              <Typography><strong> Runtime:</strong> {movie.runtime} min</Typography>
-              <Typography><strong> Rating:</strong> {movie.vote_average}/10</Typography>
+            <Stack direction="row" spacing={3} sx={{ my: 2, flexWrap: "wrap" }}>
+              <Typography><strong>Release:</strong> {movie.release_date}</Typography>
+              <Typography><strong>Runtime:</strong> {movie.runtime} min</Typography>
+              <Typography><strong>Rating:</strong> {movie.vote_average}/10</Typography>
             </Stack>
 
             {/* Genres */}
             <Box sx={{ my: 2 }}>
-              <Typography gutterBottom><strong> Genres:</strong></Typography>
+              <Typography gutterBottom><strong>Genres:</strong></Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap">
                 {movie.genres?.map((genre) => (
                   <Chip key={genre.id} label={genre.name} color="secondary" />
@@ -164,7 +182,6 @@ const MovieDetailPage = () => {
             >
               {isInList ? "Remove from Watchlist" : "Add to Watchlist"}
             </Button>
-
           </Box>
         </Stack>
 
@@ -172,7 +189,7 @@ const MovieDetailPage = () => {
         {cast.length > 0 && (
           <Box sx={{ mt: 8 }}>
             <Divider sx={{ borderColor: "#444", mb: 2 }} />
-            <Typography variant="h5" gutterBottom> Top Cast</Typography>
+            <Typography variant="h5" gutterBottom>Top Cast</Typography>
             <Stack direction="row" spacing={2} flexWrap="wrap">
               {cast.map((actor) => (
                 <Card
@@ -212,7 +229,7 @@ const MovieDetailPage = () => {
         {similar.length > 0 && (
           <Box sx={{ mt: 8 }}>
             <Divider sx={{ borderColor: "#444", mb: 2 }} />
-            <Typography variant="h5" gutterBottom> Recommended</Typography>
+            <Typography variant="h5" gutterBottom>Recommended</Typography>
             <Box
               sx={{
                 display: "flex",
