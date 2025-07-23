@@ -43,7 +43,7 @@ const SearchResultsPage = () => {
           gutterBottom
           sx={{ fontWeight: "bold", mb: 4 }}
         >
-          🔍 Results for "{query}"
+          Results for "{query}"
         </Typography>
 
         {loading ? (
