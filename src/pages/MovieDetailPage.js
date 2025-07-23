@@ -132,14 +132,14 @@ const MovieDetailPage = () => {
             </Typography>
 
             <Stack direction="row" spacing={3} sx={{ my: 2 }}>
-              <Typography><strong>🗓 Release:</strong> {movie.release_date}</Typography>
-              <Typography><strong>⏱ Runtime:</strong> {movie.runtime} min</Typography>
-              <Typography><strong>⭐ Rating:</strong> {movie.vote_average}/10</Typography>
+              <Typography><strong> Release:</strong> {movie.release_date}</Typography>
+              <Typography><strong> Runtime:</strong> {movie.runtime} min</Typography>
+              <Typography><strong> Rating:</strong> {movie.vote_average}/10</Typography>
             </Stack>
 
             {/* Genres */}
             <Box sx={{ my: 2 }}>
-              <Typography gutterBottom><strong>🎭 Genres:</strong></Typography>
+              <Typography gutterBottom><strong> Genres:</strong></Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap">
                 {movie.genres?.map((genre) => (
                   <Chip key={genre.id} label={genre.name} color="secondary" />
@@ -172,7 +172,7 @@ const MovieDetailPage = () => {
         {cast.length > 0 && (
           <Box sx={{ mt: 8 }}>
             <Divider sx={{ borderColor: "#444", mb: 2 }} />
-            <Typography variant="h5" gutterBottom>🎬 Top Cast</Typography>
+            <Typography variant="h5" gutterBottom> Top Cast</Typography>
             <Stack direction="row" spacing={2} flexWrap="wrap">
               {cast.map((actor) => (
                 <Card
@@ -212,7 +212,7 @@ const MovieDetailPage = () => {
         {similar.length > 0 && (
           <Box sx={{ mt: 8 }}>
             <Divider sx={{ borderColor: "#444", mb: 2 }} />
-            <Typography variant="h5" gutterBottom>📽 Recommended</Typography>
+            <Typography variant="h5" gutterBottom> Recommended</Typography>
             <Box
               sx={{
                 display: "flex",

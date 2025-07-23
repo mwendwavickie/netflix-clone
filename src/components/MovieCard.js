@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   Card, CardMedia, CardContent, IconButton,
   Box, Tooltip, Typography, Rating, Modal, Fade, Button
@@ -39,15 +39,18 @@ const MovieCard = ({ movie, isWatchlistPage = false }) => {
       <Card
         sx={{
           minWidth: 180,
-          backgroundColor: '#111',
+          backgroundColor: '#1c1c1c',
           color: 'white',
           position: 'relative',
           cursor: 'pointer',
-          transition: 'transform 0.3s ease',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
           borderRadius: 3,
-          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
-          "&:hover": { transform: "scale(1.05)" },
-          height: '100%',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+          "&:hover": {
+            transform: "scale(1.05)",
+            boxShadow: '0 8px 28px rgba(0,0,0,0.6)',
+          },
+          overflow: 'hidden',
         }}
         onClick={() => navigate(`/movie/${movie.id}`)}
         onMouseEnter={() => {
@@ -58,10 +61,10 @@ const MovieCard = ({ movie, isWatchlistPage = false }) => {
           setIsHoveringCard(false);
           setTimeout(() => {
             if (!isHoveringModal) setOpenModal(false);
-          }, 200); // slight delay
+          }, 200);
         }}
       >
-        {/* Poster */}
+        {/* Movie Poster */}
         <Box sx={{ position: "relative" }}>
           <CardMedia
             component="img"
@@ -69,30 +72,43 @@ const MovieCard = ({ movie, isWatchlistPage = false }) => {
             image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
             alt={movie.title || movie.name}
           />
+          {/* Gradient */}
           <Box
             sx={{
               position: "absolute",
               bottom: 0,
               width: "100%",
-              height: "50%",
+              height: "60%",
               background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
             }}
           />
-          <Box sx={{ position: "absolute", bottom: 8, left: 8, right: 8, zIndex: 2 }}>
+          {/* Title */}
+          <Box sx={{ position: "absolute", bottom: 8, left: 12, right: 8 }}>
             <Typography
-              variant="body1"
+              variant="subtitle1"
               sx={{
                 fontWeight: 600,
                 color: "#fff",
-                textShadow: "0 0 5px rgba(0,0,0,0.8)",
+                textShadow: "0 2px 6px rgba(0,0,0,0.8)",
               }}
               noWrap
             >
               {movie.title || movie.name}
             </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
+              <Rating
+                name="rating"
+                value={movie.vote_average / 2}
+                precision={0.5}
+                size="small"
+                readOnly
+              />
+              <Typography variant="caption" sx={{ color: "#ccc" }}>
+                {movie.vote_average?.toFixed(1)}
+              </Typography>
+            </Box>
           </Box>
-
-          {/* Action */}
+          {/* Watchlist Button */}
           <Box
             sx={{
               position: 'absolute',
@@ -113,9 +129,7 @@ const MovieCard = ({ movie, isWatchlistPage = false }) => {
                 sx={{
                   backgroundColor: "rgba(0,0,0,0.6)",
                   color: 'tomato',
-                  '&:hover': {
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                  },
+                  '&:hover': { backgroundColor: "rgba(255,255,255,0.2)" },
                 }}
               >
                 {isWatchlistPage
@@ -128,90 +142,87 @@ const MovieCard = ({ movie, isWatchlistPage = false }) => {
           </Box>
         </Box>
 
-        <CardContent sx={{ padding: 1 }}>
-          <Typography variant="caption" sx={{ color: "#bbb" }}>
-            {movie.release_date?.split('-')[0] || ''}
+        <CardContent sx={{ px: 1.5, py: 0.5 }}>
+          <Typography variant="caption" sx={{ color: "#aaa" }}>
+            {movie.release_date?.split('-')[0] || ' '}
           </Typography>
         </CardContent>
       </Card>
 
-      {/* Persistent Hover Modal */}
+      {/* Hover Modal */}
       <Modal open={openModal} onClose={() => setOpenModal(false)} disableAutoFocus>
-      <Fade in={shouldShowModal}>
-        <Box
-          onMouseEnter={() => setIsHoveringModal(true)}
-          onMouseLeave={() => {
-            setIsHoveringModal(false);
-            setOpenModal(false);
-          }}
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 300,
-            borderRadius: 2,
-            overflow: 'hidden',
-            boxShadow: 24,
-            zIndex: 9999,
-          }}
-        >
-          {/* Poster with Overlay */}
-          <Box sx={{ position: "relative", backdropFilter: 'blur(3px)', borderRadius: 2 }}>
-            <CardMedia
-              component="img"
-              height="400"
-              image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              
-            />
-            
-            {/* Overlay gradient */}
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 0,
-                width: "100%",
-                height: "50%",
-                background: "linear-gradient(to top, rgba(0,0,0,0.85), transparent)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-end",
-                p: 2,
-              }}
-            >
-              <Typography variant="body1" sx={{ color: "#fff", fontWeight: "bold", mb: 1 }}>
-                {movie.title || movie.name}
-              </Typography>
-
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-                <Rating
-                  name="rating"
-                  value={movie.vote_average / 2}
-                  precision={0.5}
-                  readOnly
-                  size="small"
-                />
-                <Typography variant="caption" sx={{ color: "lightgray" }}>
-                  {movie.vote_average?.toFixed(1)}/10
-                </Typography>
-              </Box>
-
-              <Button
-                variant="contained"
-                color="error"
-                size="small"
-                onClick={() => navigate(`/movie/${movie.id}`)}
-                sx={{ textTransform: 'none' }}
+        <Fade in={shouldShowModal}>
+          <Box
+            onMouseEnter={() => setIsHoveringModal(true)}
+            onMouseLeave={() => {
+              setIsHoveringModal(false);
+              setOpenModal(false);
+            }}
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 320,
+              borderRadius: 3,
+              overflow: 'hidden',
+              bgcolor: '#1e1e1e',
+              boxShadow: 24,
+              zIndex: 9999,
+            }}
+          >
+            {/* Poster & Info */}
+            <Box sx={{ position: "relative" }}>
+              <CardMedia
+                component="img"
+                height="400"
+                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+              />
+              <Box
+                sx={{
+                  position: "absolute",
+                  bottom: 0,
+                  width: "100%",
+                  background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent)",
+                  p: 2,
+                }}
               >
-                View Details
-              </Button>
+                <Typography variant="h6" sx={{ color: "#fff", mb: 1 }}>
+                  {movie.title || movie.name}
+                </Typography>
+
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                  <Rating
+                    name="rating"
+                    value={movie.vote_average / 2}
+                    precision={0.5}
+                    readOnly
+                    size="small"
+                  />
+                  <Typography variant="caption" sx={{ color: "lightgray" }}>
+                    {movie.vote_average?.toFixed(1)}/10
+                  </Typography>
+                </Box>
+
+                <Typography variant="body2" sx={{ color: "#ccc", mb: 1 }} noWrap>
+                  {movie.overview || "No description available"}
+                </Typography>
+
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  onClick={() => navigate(`/movie/${movie.id}`)}
+                  sx={{ textTransform: 'none' }}
+                >
+                  View Details
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Fade>
+        </Fade>
       </Modal>
-
     </>
   );
 };

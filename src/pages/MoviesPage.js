@@ -64,12 +64,13 @@ const MoviesPage = () => {
           variant="h4"
           sx={{
             fontWeight: "bold",
-            mb: 4,
+            mb: 1,
             textAlign: "center",
             textShadow: "1px 1px 2px rgba(255, 0, 0, 0.5)",
           }}
         >
-          Browse by Genre
+          Explore Movies by Genre
+        
         </Typography>
 
         {Object.entries(genreMap).map(([genre]) => (
