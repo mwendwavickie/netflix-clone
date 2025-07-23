@@ -5,6 +5,11 @@ import {
   Container, Typography, Box, Stack, Chip, Button,
   Card, CardMedia, CardContent, Divider
 } from "@mui/material";
+import { useWatchLater } from "../context/WatchLaterContext";
+import { toast } from "react-toastify";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 
 const API_KEY = process.env.REACT_APP_TMDB_KEY;
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500/";
@@ -17,6 +22,13 @@ const MovieDetailPage = () => {
   const [trailer, setTrailer] = useState(null);
   const [cast, setCast] = useState([]);
   const [similar, setSimilar] = useState([]);
+  const { addToWatchLater, removeFromWatchLater, isInWatchList } = useWatchLater();
+  const [isInList, setIsInList] = useState(false);
+
+  useEffect(() => {
+    setIsInList(isInWatchList(id));
+  }, [id, isInWatchList]);
+
 
   useEffect(() => {
     axios
@@ -44,6 +56,20 @@ const MovieDetailPage = () => {
       .then(res => setSimilar(res.data.results))
       .catch(error => console.error("Similar fetch error:", error));
   }, [id]);
+
+  const handleWatchlistClick = () => {
+    if (!movie) return;
+  
+    if (isInList) {
+      removeFromWatchLater(movie.id);
+      toast.info("Removed from Watchlist");
+    } else {
+      addToWatchLater(movie);
+      toast.success("Added to Watchlist");
+    }
+    setIsInList(!isInList);
+  };
+  
 
   if (!movie)
     return <Typography sx={{ color: "white", textAlign: "center", mt: 10 }}>Loading movie details...</Typography>;
@@ -122,12 +148,23 @@ const MovieDetailPage = () => {
             </Box>
 
             <Button
-              variant="contained"
+              variant={isInList ? "outlined" : "contained"}
               color="error"
-              sx={{ mt: 2 }}
+              startIcon={isInList ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              sx={{
+                mt: 3,
+                textTransform: "none",
+                fontWeight: 600,
+                px: 3,
+                py: 1,
+                borderRadius: "30px",
+                transition: "all 0.3s ease",
+              }}
+              onClick={handleWatchlistClick}
             >
-              ➕ Add to Watchlist
+              {isInList ? "Remove from Watchlist" : "Add to Watchlist"}
             </Button>
+
           </Box>
         </Stack>
 
